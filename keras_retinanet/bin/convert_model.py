@@ -20,6 +20,9 @@ import argparse
 import os
 import sys
 
+import keras
+import tensorflow as tf
+
 # Allow relative imports when being executed as script.
 if __name__ == "__main__" and __package__ is None:
     sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -29,9 +32,14 @@ if __name__ == "__main__" and __package__ is None:
 # Change these to absolute imports if you copy this script outside the keras_retinanet package.
 from .. import models
 from ..utils.config import read_config_file, parse_anchor_parameters
-from ..utils.gpu import setup_gpu
-from ..utils.keras_version import check_keras_version
-from ..utils.tf_version import check_tf_version
+
+
+def get_session():
+    """ Construct a modified tf session.
+    """
+    config = tf.ConfigProto()
+    os.environ["CUDA_VISIBLE_DEVICES"] = ""
+    return tf.Session(config=config)
 
 
 def parse_args(args):
@@ -53,12 +61,8 @@ def main(args=None):
         args = sys.argv[1:]
     args = parse_args(args)
 
-    # make sure keras and tensorflow are the minimum required version
-    check_keras_version()
-    check_tf_version()
-
-    # set modified tf session to avoid using the GPUs
-    setup_gpu('cpu')
+    # Set modified tf session to avoid using the GPUs
+    keras.backend.tensorflow_backend.set_session(get_session())
 
     # optionally load config parameters
     anchor_parameters = None
