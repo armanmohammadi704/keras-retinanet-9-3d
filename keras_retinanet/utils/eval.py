@@ -282,8 +282,11 @@ def evaluate(
             try:
                 false_positives1_ix = int(max(false_positives_ix))
             except:
-                print(false_positives_ix)
-            true_positives1_ix = int(max(true_positives_ix))
+                false_positives1_ix=0
+            try:
+                true_positives1_ix = int(max(true_positives_ix))
+            except:
+                true_positives1_ix=0
             print("\033[1;31;34m \n","----------------------------")
             print("\033[3;28;88m\n",generator.image_path(i)[5:(len(generator.image_path(i))-4)],": ")
             """
