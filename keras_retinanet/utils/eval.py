@@ -156,6 +156,7 @@ def evaluate(
         A dict mapping class names to mAP scores.
     """
     # gather all detections and annotations
+    output={}
     all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections)
     all_annotations    = _get_annotations(generator)
     all_detections1= _get_detections(generator, model, score_threshold=0.5, max_detections=max_detections)
@@ -194,6 +195,7 @@ def evaluate(
         num_annotations = 0.0
 
         for i in range(generator.size()):
+            output[generator.image_names[i]]=[]
             detections           = all_detections[i][label]
             detections1          = all_detections1[i][label]
             annotations          = all_annotations[i][label]
@@ -202,7 +204,9 @@ def evaluate(
             detected_annotations1 = []
             image1 = generator.load_image(i)[:,:,1].astype(np.uint8)
             image1 = cv2.cvtColor(image1,cv2.COLOR_GRAY2BGR)
+            
             draw_annotations(image1, generator.load_annotations(i))
+            output[generator.image_names[i]]['annotations'].append(generator.load_annotations(i))
 
 
             for d in detections:
@@ -235,6 +239,7 @@ def evaluate(
                         true_positives_ix  = np.append(true_positives_ix, 1)
                         draw_box(image1,image_boxes1,color=(0,255,0))
                         draw_caption(image1,image_boxes1,'TP:'+str(round(image_scores1,2)))
+                        output[generator.image_names[i]]['TP'].append([image_boxes1,'TP:'+str(round(image_scores1,2)))
                         detected_annotations1.append(assigned_annotation)
 
                 else:
@@ -249,6 +254,7 @@ def evaluate(
                         true_positives_ix  = np.append(true_positives_ix, 0)
                         draw_box(image1,image_boxes1,color=(0,0,255))
                         draw_caption(image1,image_boxes1,'FP:'+str(round(image_scores1,2)))
+                        output[generator.image_names[i]]['FP'].append([image_boxes1,'FP:'+str(round(image_scores1,2)))
             anno = annotations.tolist()   
             for a in anno:
                 if anno.index(a) not in detected_annotations:
@@ -260,6 +266,7 @@ def evaluate(
                     image_boxes3=a
                     draw_box(image1,image_boxes3,color=(120,0,120))
                     draw_caption(image1,image_boxes3,'FN')
+                    output[generator.image_names[i]]['FN'].append([image_boxes3,'FN')
                     false_negativesx = np.append(false_negativesx, 1)
                     false_negatives_ix = np.append(false_negatives_ix, 1)
                     
@@ -411,5 +418,5 @@ def evaluate(
         #name='Results/{}.txt'.format(save_log[:-3])
         #np.savetxt(name,p)
         return(p)
-    return average_precisions
+    return output
 # Editted by Mohammad Rahimzadeh (mr7495@yahoo.com)
