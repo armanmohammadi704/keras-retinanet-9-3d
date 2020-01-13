@@ -239,7 +239,7 @@ def evaluate(
                         true_positives_ix  = np.append(true_positives_ix, 1)
                         draw_box(image1,image_boxes1,color=(0,255,0))
                         draw_caption(image1,image_boxes1,'TP:'+str(round(image_scores1,2)))
-                        output[generator.image_names[i]]['TP'].append([image_boxes1,'TP:'+str(round(image_scores1,2)))
+                        output[generator.image_names[i]]['TP'].append([image_boxes1,'TP:'+str(round(image_scores1,2))])
                         detected_annotations1.append(assigned_annotation)
 
                 else:
@@ -254,7 +254,7 @@ def evaluate(
                         true_positives_ix  = np.append(true_positives_ix, 0)
                         draw_box(image1,image_boxes1,color=(0,0,255))
                         draw_caption(image1,image_boxes1,'FP:'+str(round(image_scores1,2)))
-                        output[generator.image_names[i]]['FP'].append([image_boxes1,'FP:'+str(round(image_scores1,2)))
+                        output[generator.image_names[i]]['FP'].append([image_boxes1,'FP:'+str(round(image_scores1,2))])
             anno = annotations.tolist()   
             for a in anno:
                 if anno.index(a) not in detected_annotations:
@@ -266,7 +266,7 @@ def evaluate(
                     image_boxes3=a
                     draw_box(image1,image_boxes3,color=(120,0,120))
                     draw_caption(image1,image_boxes3,'FN')
-                    output[generator.image_names[i]]['FN'].append([image_boxes3,'FN')
+                    output[generator.image_names[i]]['FN'].append([image_boxes3,'FN'])
                     false_negativesx = np.append(false_negativesx, 1)
                     false_negatives_ix = np.append(false_negatives_ix, 1)
                     
