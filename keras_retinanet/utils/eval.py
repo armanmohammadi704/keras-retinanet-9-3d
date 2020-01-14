@@ -195,7 +195,7 @@ def evaluate(
         num_annotations = 0.0
 
         for i in range(generator.size()):
-            output[generator.image_names[i]]=[]
+            output[generator.image_names[i]]={'annotations:[],'TP':[],'FP':[],'FN':[]}
             detections           = all_detections[i][label]
             detections1          = all_detections1[i][label]
             annotations          = all_annotations[i][label]
@@ -206,8 +206,7 @@ def evaluate(
             image1 = cv2.cvtColor(image1,cv2.COLOR_GRAY2BGR)
             
             draw_annotations(image1, generator.load_annotations(i))
-            annot=generator.load_annotations(i)
-            output[generator.image_names[i]]['annotations'].append([annot])
+            output[generator.image_names[i]]['annotations'].append(generator.load_annotations(i))
 
 
             for d in detections:
