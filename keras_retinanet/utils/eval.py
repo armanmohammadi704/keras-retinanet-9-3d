@@ -206,7 +206,8 @@ def evaluate(
             image1 = cv2.cvtColor(image1,cv2.COLOR_GRAY2BGR)
             
             draw_annotations(image1, generator.load_annotations(i))
-            output[generator.image_names[i]]['annotations'].append(generator.load_annotations(i))
+            annot=generator.load_annotations(i)
+            output[generator.image_names[i]]['annotations'].append([annot])
 
 
             for d in detections:
