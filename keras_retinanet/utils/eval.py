@@ -195,7 +195,7 @@ def evaluate(
         num_annotations = 0.0
 
         for i in range(generator.size()):
-            output[generator.image_names[i]]={'annotations:[],'TP':[],'FP':[],'FN':[]}
+            output[generator.image_names[i]]={'annotations':[],'TP':[],'FP':[],'FN':[]}
             detections           = all_detections[i][label]
             detections1          = all_detections1[i][label]
             annotations          = all_annotations[i][label]
