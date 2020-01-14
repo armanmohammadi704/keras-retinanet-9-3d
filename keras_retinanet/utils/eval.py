@@ -386,6 +386,8 @@ def evaluate(
     precision_allx = max(true_positivesx) / (max(true_positivesx + false_positivesx))
     precision_all = max(true_positives) / (max(true_positives + false_positives))
     # compute average precision
+    print(recall)
+    print(precision)
     average_precision  = _compute_ap(recall, precision)
     average_precisions[label] = average_precision, num_annotations
     accuracy = max(true_positives) / (max(true_positives + false_positives + max(false_negatives)))
