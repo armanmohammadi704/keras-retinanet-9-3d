@@ -200,7 +200,6 @@ class CSVGenerator(Generator):
         # PIL is fast for metadata
         image = Image.open(self.image_path(image_index))
         return float(image.width) / float(image.height)
-
     def load_image(self, image_index):
         """ Load an image at the image_index.
         """
@@ -208,29 +207,54 @@ class CSVGenerator(Generator):
 
         if  img_path[-6:] == '01.jpg':
             image_index1 = image_index
-            image_index2 = image_index+1
-
-        elif img_path[-6:] == '25.jpg':
-            image_index1 = image_index-1
             image_index2 = image_index
-
+            image_index3 = image_index
+            image_index4 = image_index
+        elif img_path[-6:] == '02.jpg':
+            image_index1 = image_index-1
+            image_index2 = image_index-1
+            image_index3 = image_index-1
+            image_index4 = image_index-1
+        elif img_path[-6:] == '03.jpg':
+            image_index1 = image_index-1
+            image_index2 = image_index-2
+            image_index3 = image_index-2
+            image_index4 = image_index-2
+        elif img_path[-6:] == '04.jpg':
+            image_index1 = image_index-1
+            image_index2 = image_index-2
+            image_index3 = image_index-3
+            image_index4 = image_index-3
         else:
             image_index1 = image_index-1
-            image_index2 = image_index+1
+            image_index2 = image_index-2
+            image_index3 = image_index-3
+            image_index4 = image_index-4
 
         image1=read_image_bgr(self.image_path(image_index))
         image2=read_image_bgr(self.image_path(image_index1))
         image3=read_image_bgr(self.image_path(image_index2))
-
+        image4=read_image_bgr(self.image_path(image_index3))
+        image5=read_image_bgr(self.image_path(image_index4))
+        
         gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
         gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
         gray3 = cv2.cvtColor(image3, cv2.COLOR_BGR2GRAY)
-
-        img = np.zeros((576,768,3))
-        img[:,:,0]= gray2
-        img[:,:,1]= gray1
-        img[:,:,2]= gray3
+        gray4 = cv2.cvtColor(image4, cv2.COLOR_BGR2GRAY)
+        gray5 = cv2.cvtColor(image5, cv2.COLOR_BGR2GRAY)
         
+        img = np.zeros((576,768,9))
+        img[:,:,0]= gray5
+        img[:,:,1]= gray4
+        img[:,:,2]= gray3
+        img[:,:,3]= gray2
+        img[:,:,4]= gray1
+        img[:,:,5]= gray2
+        img[:,:,6]= gray3
+        img[:,:,7]= gray4
+        img[:,:,8]= gray5
+        
+
         return img
 
     def load_annotations(self, image_index):
