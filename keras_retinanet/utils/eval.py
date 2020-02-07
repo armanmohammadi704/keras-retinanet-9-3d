@@ -157,9 +157,9 @@ def evaluate(
     """
     # gather all detections and annotations
     output={}
-    all_detections     = _get_detections(generator, model, score_threshold=score_threshold, max_detections=max_detections)
+    all_detections     = _get_detections(generator, model, score_threshold=0.5, max_detections=max_detections)
     all_annotations    = _get_annotations(generator)
-    all_detections1= _get_detections(generator, model, score_threshold=0.5, max_detections=max_detections)
+    #all_detections1= _get_detections(generator, model, score_threshold=0.5, max_detections=max_detections)
     average_precisions = {}
     if save_path is None:
         try:
@@ -197,12 +197,12 @@ def evaluate(
         for i in range(generator.size()):
             output[generator.image_names[i]]={'annotations':[],'TP':[],'FP':[],'FN':[]}
             detections           = all_detections[i][label]
-            detections1          = all_detections1[i][label]
+           # detections1          = all_detections1[i][label]
             annotations          = all_annotations[i][label]
             num_annotations     += annotations.shape[0]
             detected_annotations = []
             detected_annotations1 = []
-            image1 = generator.load_image(i)[:,:,1].astype(np.uint8)
+            image1 = generator.load_image(i)[:,:,4].astype(np.uint8)
             image1 = cv2.cvtColor(image1,cv2.COLOR_GRAY2BGR)
             
             draw_annotations(image1, generator.load_annotations(i))
@@ -414,7 +414,7 @@ def evaluate(
         except:
             pass
         f1=2*((precision_allx*recallx)/(precision_allx+recallx))
-        p=np.array([int(save_log[:-3]),true_positives1x,false_positives1x,false_negatives1x,np.float(average_precisions[label][0]),np.float(recallx),np.float(accuracyx),np.float(precision_allx),np.float(f1)])
+        p=np.array([save_log[:-3],true_positives1x,false_positives1x,false_negatives1x,np.float(average_precisions[label][0]),np.float(recallx),np.float(accuracyx),np.float(precision_allx),np.float(f1)])
         #name='Results/{}.txt'.format(save_log[:-3])
         #np.savetxt(name,p)
         return(p)
