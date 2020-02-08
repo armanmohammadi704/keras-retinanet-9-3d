@@ -151,6 +151,7 @@ class Generator(keras.utils.Sequence):
         """ Filter annotations by removing those that are outside of the image bounds or whose width/height < 0.
         """
         # test all annotations
+        """
         for index, (image, annotations) in enumerate(zip(image_group, annotations_group)):
             # test x2 < x1 | y2 < y1 | x1 < 0 | y1 < 0 | x2 <= 0 | y2 <= 0 | x2 >= image.shape[1] | y2 >= image.shape[0]
             invalid_indices = np.where(
@@ -171,7 +172,7 @@ class Generator(keras.utils.Sequence):
                 ))
                 for k in annotations_group[index].keys():
                     annotations_group[index][k] = np.delete(annotations[k], invalid_indices, axis=0)
-
+        """
         return image_group, annotations_group
 
     def load_image_group(self, group):
@@ -254,13 +255,11 @@ class Generator(keras.utils.Sequence):
 
         # divide into groups, one group = one batch
         self.groups = [[order[x % len(order)] for x in range(i, i + self.batch_size)] for i in range(0, len(order), self.batch_size)]
-
     def compute_inputs(self, image_group):
         """ Compute inputs for the network using an image_group.
         """
         # get the max image shape
-        max_shape = tuple(max(image.shape[x] for image in image_group) for x in range(3))
-
+        max_shape = tuple(max(image.shape[x] for image in image_group) for x in range(4))
         # construct an image batch object
         image_batch = np.zeros((self.batch_size,) + max_shape, dtype=keras.backend.floatx())
 
@@ -304,13 +303,10 @@ class Generator(keras.utils.Sequence):
 
         # check validity of annotations
         image_group, annotations_group = self.filter_annotations(image_group, annotations_group, group)
-
         # randomly transform data
         image_group, annotations_group = self.random_transform_group(image_group, annotations_group)
-
         # perform preprocessing steps
         image_group, annotations_group = self.preprocess_group(image_group, annotations_group)
-
         # compute network inputs
         inputs = self.compute_inputs(image_group)
 
