@@ -254,7 +254,7 @@ class CSVGenerator(Generator):
         img[:,:,7]= gray4
         img[:,:,8]= gray5
         
-
+        img=np.expand_dims(img,axis=3)
         return img
 
     def load_annotations(self, image_index):
