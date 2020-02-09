@@ -157,7 +157,7 @@ def evaluate(
     """
     # gather all detections and annotations
     output={}
-    all_detections     = _get_detections(generator, model, score_threshold=0.5, max_detections=max_detections)
+    all_detections     = _get_detections(generator, model, score_threshold=0.3, max_detections=max_detections)
     all_annotations    = _get_annotations(generator)
     #all_detections1= _get_detections(generator, model, score_threshold=0.5, max_detections=max_detections)
     average_precisions = {}
